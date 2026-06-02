@@ -16,7 +16,7 @@ def loadImages():
     peices = ["wP", "wR", "wN", "wB", "wQ", "wK", "bP", "bR", "bB", "bN", "bK", "bQ"]
 
     for peice in peices:
-        IMAGES[peice] = p.transform.scale(p.image.load("imgs/"+ peice + ".png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES.append(p.transform.scale(p.image.load("imgs/"+ peice + ".png"), (SQ_SIZE, SQ_SIZE)))
 
 def main():
     screen = p.display.set_mode((WIDTH, HEIGHT))
@@ -28,13 +28,29 @@ def main():
     running = True
     while running:
         for e in p.event.get():
-            if e == p.QUIT:
+            if e.type == p.QUIT:
                 running = False
         
         clock.tick(MAX_FPS)
         p.display.flip()
+        drawGame(screen, gs)
 
-    print(gs.board)
+def drawGame(screen, gs):
+    drawBoard(screen)
+    drawPeice(screen, gs.board)
+
+def drawBoard(screen):
+    colors = [p.Color("white"), p.Color("grey")]
+
+    for r in range(DIMENTION):
+        for c in range(DIMENTION):
+            color = colors[((r+c)%2)]
+            p.draw.rect(screen, color, p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+            
+
+def drawPeice(screen, board):
+    pass
+
 
 if __name__ == "__main__":
     main()
