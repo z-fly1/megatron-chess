@@ -17,3 +17,24 @@ def loadImages():
 
     for peice in peices:
         IMAGES[peice] = p.transform.scale(p.image.load("imgs/"+ peice + ".png"), (SQ_SIZE, SQ_SIZE))
+
+def main():
+    screen = p.display.set_mode((WIDTH, HEIGHT))
+    clock = p.time.Clock()
+    screen.fill(p.Color("White"))
+    gs = GameState()
+    loadImages()
+
+    running = True
+    while running:
+        for e in p.event.get():
+            if e == p.QUIT:
+                running = False
+        
+        clock.tick(MAX_FPS)
+        p.display.flip()
+
+    print(gs.board)
+
+if __name__ == "__main__":
+    main()
