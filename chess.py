@@ -7,7 +7,7 @@ SQ_SIZE = WIDTH / DIMENTION
 
 MAX_FPS = 15
 
-IMAGES = []
+IMAGES = {}
 
 p.init()
 
@@ -16,7 +16,7 @@ def loadImages():
     peices = ["wP", "wR", "wN", "wB", "wQ", "wK", "bP", "bR", "bB", "bN", "bK", "bQ"]
 
     for peice in peices:
-        IMAGES.append(p.transform.scale(p.image.load("imgs/"+ peice + ".png"), (SQ_SIZE, SQ_SIZE)))
+        IMAGES[peice] = p.transform.scale(p.image.load("imgs/"+ peice + ".png"), (SQ_SIZE, SQ_SIZE))
 
 def main():
     screen = p.display.set_mode((WIDTH, HEIGHT))
@@ -49,7 +49,11 @@ def drawBoard(screen):
             
 
 def drawPeice(screen, board):
-    pass
+    for r in range(DIMENTION):
+        for c in range(DIMENTION):
+            peice = board[r][c]
+            if peice != "--":
+                screen.blit(IMAGES[peice], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
 
 if __name__ == "__main__":
