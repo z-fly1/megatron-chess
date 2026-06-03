@@ -2,7 +2,7 @@ import pygame as p
 from engine import GameState
 from engine import Move as m
 
-WIDTH = HEIGHT = 512
+WIDTH = HEIGHT = 800
 DIMENTION = 8
 SQ_SIZE = WIDTH / DIMENTION
 
@@ -17,7 +17,7 @@ def loadImages():
     peices = ["wP", "wR", "wN", "wB", "wQ", "wK", "bP", "bR", "bB", "bN", "bK", "bQ"]
 
     for peice in peices:
-        IMAGES[peice] = p.transform.scale(p.image.load("imgs/"+ peice + ".png"), (SQ_SIZE, SQ_SIZE))
+        IMAGES[peice] = p.transform.scale(p.image.load("imgs/svg/"+ peice + ".svg"), (SQ_SIZE, SQ_SIZE))
 
 def main():
     screen = p.display.set_mode((WIDTH, HEIGHT))
