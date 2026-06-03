@@ -1,5 +1,6 @@
 import pygame as p
 from engine import GameState
+from engine import Move as m
 
 WIDTH = HEIGHT = 512
 DIMENTION = 8
@@ -26,10 +27,30 @@ def main():
     loadImages()
 
     running = True
+    sqSelected = ()
+    playerMove = []
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
+            elif e.type == p.MOUSEBUTTONDOWN:
+                location = p.mouse.get_pos()
+                col = int(location[0]//SQ_SIZE)
+                row = int(location[1] // SQ_SIZE)
+                if sqSelected == (row, col):
+                    sqSelected = ()
+                    playerMove = []
+                else:
+                    sqSelected = (row, col)
+                    playerMove.append(sqSelected)
+
+                if len(playerMove) == 2:
+                    move = m(playerMove[0], playerMove[1], gs.board)
+                    gs.makeMove(move)
+                    sqSelected = ()
+                    playerMove = []
+                    
+
         
         clock.tick(MAX_FPS)
         p.display.flip()

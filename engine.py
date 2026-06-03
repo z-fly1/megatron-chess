@@ -10,3 +10,24 @@ class GameState():
             ["wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"],
         ]
+        self.whiteToMove = True
+        self.moveLog = []
+
+    def makeMove(self, move):
+        self.board[move.startRow][move.startCol] = "--"
+        self.board[move.endRow][move.endCol] = move.peiceMoved
+        self.whiteToMove = not self.whiteToMove 
+        self.moveLog.append(move)
+
+class Move():
+    def __init__(self, sqStart, sqEnd, board):
+        self.startRow = sqStart[0]
+        self.startCol = sqStart[1]
+        self.endRow = sqEnd[0]
+        self.endCol = sqEnd[1]
+
+        self.peiceMoved = board[self.startRow][self.startCol]
+        self.peiceCaptured = board[self.endRow][self.endCol]
+
+    def getChessNotaion(self):
+        pass #add this later 
