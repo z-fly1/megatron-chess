@@ -19,6 +19,14 @@ class GameState():
         self.whiteToMove = not self.whiteToMove 
         self.moveLog.append(move)
 
+    def undoMove(self):
+        if len(self.moveLog) != 0:
+            move = self.moveLog.pop()
+            self.board[move.startRow][move.startCol] = move.peiceMoved
+            self.board[move.endRow][move.endCol] = move.peiceCaptured
+            self.whiteToMove = not self.whiteToMove
+
+
 class Move():
     def __init__(self, sqStart, sqEnd, board):
         self.startRow = sqStart[0]

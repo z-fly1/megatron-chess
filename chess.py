@@ -2,7 +2,7 @@ import pygame as p
 from engine import GameState
 from engine import Move as m
 
-WIDTH = HEIGHT = 800
+WIDTH = HEIGHT = 512
 DIMENTION = 8
 SQ_SIZE = WIDTH / DIMENTION
 
@@ -49,7 +49,11 @@ def main():
                     gs.makeMove(move)
                     sqSelected = ()
                     playerMove = []
-                    
+            
+
+            elif e.type == p.KEYDOWN:
+                if e.key == p.K_z:
+                    gs.undoMove()
 
         
         clock.tick(MAX_FPS)
