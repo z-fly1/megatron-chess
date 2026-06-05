@@ -47,6 +47,7 @@ def main():
                 if len(playerMove) == 2:
                     move = m(playerMove[0], playerMove[1], gs.board)
                     gs.makeMove(move)
+                    m.getChessNotaion(playerMove[0], playerMove[1], gs.board)
                     sqSelected = ()
                     playerMove = []
             
