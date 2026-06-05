@@ -58,9 +58,14 @@ class Move():
         self.endCol = sqEnd[1]
 
         rankToFile = {0: "A", 1:"B", 2:"C", 3:"D", 4:"E", 5:"F", 6:"G", 7: "H"}
+        rowToRank = {0 : 8, 1:7, 2:6, 3:5, 4:4, 5:3, 6:2, 7:1}
 
         notation = ""
         color = board[self.startRow][self.startCol][0]
         peice = board[self.startRow][self.startCol][1]
-        
-        return peice + rankToFile[self.endCol] + (self.startRow + 1)
+
+        if peice == "P":
+            print(rankToFile[self.endCol] + str(rowToRank[self.endRow]))
+
+        else:
+            print( peice + rankToFile[self.endCol] + str(rowToRank[self.endRow]))
