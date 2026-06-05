@@ -26,17 +26,39 @@ class GameState():
             self.board[move.endRow][move.endCol] = move.peiceCaptured
             self.whiteToMove = not self.whiteToMove
 
+    def getValidMoves(self):
+        return self.getAllMoves()
+
     def getAllMoves(self):
         moves = []
         for r in range(len(self.board)):
             for c in range(len(self.board[r])):
                 turn = self.board[r][c][0]
 
-                if(turn == 'w' and self.whiteToMove) and (turn == "b" and not self.whiteToMove):
+                if(turn == 'w' and self.whiteToMove) or (turn == "b" and not self.whiteToMove):
                     peice = self.board[r][c][1]
 
-                    if peice == 'p':
-                        pass
+                    if peice == 'P':
+                        self.getPawnMoves(r, c, moves)
+
+        return moves
+                    
+    def getPawnMoves(self, r, c, moves):
+        if self.whiteToMove:
+            if self.board[r-1][c] == "--":
+                moves.append(Move((r,c), (r-1, c), self.board))
+                
+
+                if r == 6 and self.board[r-2][c] == "--":
+                    moves.append(Move((r,c), (r-2, c), self.board))
+
+        else:
+            if self.board[r+1][c] == "--":
+                moves.append(Move((r,c), (r+1, c), self.board))
+
+                if r == 1 and self.board[r+2][c] == "--":
+                    moves.append(Move((r,c), (r+2, c), self.board))
+
 
 
 
@@ -49,6 +71,16 @@ class Move():
 
         self.peiceMoved = board[self.startRow][self.startCol]
         self.peiceCaptured = board[self.endRow][self.endCol]
+
+
+        self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
+
+    def __eq__(self, other):
+        if isinstance(other, Move):
+            return self.moveID == other.moveID
+        else:
+            return False
+        
 
     def getChessNotaion(self, sqStart, sqEnd, board):
 
@@ -69,6 +101,6 @@ class Move():
 
         elif board[self.endRow][self.endCol][1] != "-":
             print( peice + "x" + rankToFile[self.endCol] + str(rowToRank[self.endRow]))
-            
+
         else:
             print( peice + rankToFile[self.endCol] + str(rowToRank[self.endRow]))
