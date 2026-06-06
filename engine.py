@@ -13,6 +13,15 @@ class GameState():
         self.whiteToMove = True
         self.moveLog = []
 
+        self.moveFunctions = {
+            "P" : self.getPawnMoves,
+            "R" : self.getRookMoves,
+            "N" : self.getKnightMoves,
+            "B" : self.getBishopMoves,
+            "Q" : self.getQueenMoves,
+            "K" : self.getKingMoves
+        }
+
     def makeMove(self, move):
         self.board[move.startRow][move.startCol] = "--"
         self.board[move.endRow][move.endCol] = move.peiceMoved
@@ -38,8 +47,7 @@ class GameState():
                 if(turn == 'w' and self.whiteToMove) or (turn == "b" and not self.whiteToMove):
                     peice = self.board[r][c][1]
 
-                    if peice == 'P':
-                        self.getPawnMoves(r, c, moves)
+                    self.moveFunctions[peice](r,c, moves)
 
         return moves
                     
@@ -75,7 +83,20 @@ class GameState():
                 if self.board[r+1][c+1][0] == "w":
                     moves.append(Move((r,c), (r+1, c+1), self.board))
 
+    def getRookMoves(self, r, c, moves):
+        pass
 
+    def getKnightMoves(self, r, c, moves):
+        pass
+
+    def getBishopMoves(self, r, c, moves):
+        pass
+
+    def getQueenMoves(self, r, c, moves):
+        pass
+
+    def getKingMoves(self, r, c, moves):
+        pass
 
 
 class Move():
