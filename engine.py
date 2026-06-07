@@ -126,8 +126,6 @@ class GameState():
             endRow = r + m[0]
             endCol = c + m[1]
 
-            print(endRow, endCol)
-
             if 0 <= endRow < 8  and 0 <= endCol < 8:
                 endPiece = self.board[endRow][endCol]
 
@@ -168,7 +166,8 @@ class GameState():
 
 
     def getQueenMoves(self, r, c, moves):
-        pass
+        self.getRookMoves(r, c, moves)
+        self.getBishopMoves(r, c, moves)
 
     def getKingMoves(self, r, c, moves):
         pass
