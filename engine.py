@@ -116,7 +116,34 @@ class GameState():
         pass
 
     def getBishopMoves(self, r, c, moves):
-        pass
+        
+        if self.whiteToMove:
+            enemyColor = "b"
+        else:
+            enemyColor = "w"
+
+        directions = ((-1, -1), (1, -1), (-1, 1), (1, 1)) #left-up, left-dow, right-up, right-down
+
+        for d in directions: 
+            for i in range(1, len(self.board) + 1):
+
+                endRow = r + d[0] * i
+                endCol = c + d[1] * i
+
+                if 0 <= endRow < len(self.board) and 0 <= endCol < len(self.board):
+                    endPiece = self.board[endRow][endCol]
+
+                    if endPiece[0] == enemyColor:
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
+
+                    elif endPiece == "--":
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
+
+                    else:
+                        break
+                else:
+                    break
+
 
     def getQueenMoves(self, r, c, moves):
         pass
