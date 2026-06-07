@@ -84,7 +84,33 @@ class GameState():
                     moves.append(Move((r,c), (r+1, c+1), self.board))
 
     def getRookMoves(self, r, c, moves):
-        pass
+
+        if self.whiteToMove:
+            enemyColor = "b"
+        else:
+            enemyColor = "w"
+
+        directions = ((-1, 0), (0, -1), (1, 0), (0, 1)) #up, left, down, right
+
+        for d in directions:
+            for i in range(1, len(self.board) + 1):
+                endRow = r + d[0] * i
+                endCol = c + d[1] * i
+
+                if 0 <= endRow < len(self.board) and 0 <= endCol < len(self.board):
+                    endPeice = self.board[endRow][endCol]
+
+                    if endPeice[0] == enemyColor:
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
+
+                    elif endPeice == "--":
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
+
+                    else:
+                        break
+                else:
+                    break
+                
 
     def getKnightMoves(self, r, c, moves):
         pass
