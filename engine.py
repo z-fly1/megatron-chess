@@ -120,9 +120,9 @@ class GameState():
             enemyColor = "w"
 
 
-        knightMoves = ((-1, -2), (1, -2), (2, -1), (2, 1), (1, 2), (-1, 2), (-2, 1), (-2, -1))
+        knightSquares = ((-1, -2), (1, -2), (2, -1), (2, 1), (1, 2), (-1, 2), (-2, 1), (-2, -1))
 
-        for m in knightMoves:
+        for m in knightSquares:
             endRow = r + m[0]
             endCol = c + m[1]
 
@@ -169,8 +169,30 @@ class GameState():
         self.getRookMoves(r, c, moves)
         self.getBishopMoves(r, c, moves)
 
+
     def getKingMoves(self, r, c, moves):
-        pass
+        
+        if self.whiteToMove:
+            enemyColor = "b"
+        else:
+            enemyColor = "w"
+
+        kingSquares = ((-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0))
+
+        for sq in kingSquares:
+            
+            endRow = r + sq[0]
+            endCol = c + sq[1]
+
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                endPiece = self.board[endRow][endCol]
+
+                if endPiece[0] == enemyColor:
+                    moves.append(Move((r, c), (endRow, endCol), self.board))
+
+                elif endPiece == "--":
+                    moves.append(Move((r, c), (endRow, endCol), self.board))
+
 
 
 class Move():
