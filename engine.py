@@ -12,6 +12,7 @@ class GameState():
         ]
         self.whiteToMove = True
         self.moveLog = []
+        self.kingLocations = ((0, 4), (7,4)) #black -> white
 
         self.moveFunctions = {
             "P" : self.getPawnMoves,
@@ -28,12 +29,24 @@ class GameState():
         self.whiteToMove = not self.whiteToMove 
         self.moveLog.append(move)
 
+        if move.peiceMoved == "bK":
+            self.kingLocations[0] = (move.endRow, move.endCol)
+
+        elif move.peiceMoved == "wK":
+            self.kingLocations[1] = (move.endRow, move.endCol)
+
     def undoMove(self):
         if len(self.moveLog) != 0:
             move = self.moveLog.pop()
             self.board[move.startRow][move.startCol] = move.peiceMoved
             self.board[move.endRow][move.endCol] = move.peiceCaptured
             self.whiteToMove = not self.whiteToMove
+
+            if move.peiceMoved == "bK":
+                self.kingLocations[0] = (move.startRow, move.startCol)
+
+            elif move.peiceMoved == "wK":
+                self.kingLocations[1] = (move.startRow, move.startCol)
 
     def getValidMoves(self):
         return self.getAllMoves()
