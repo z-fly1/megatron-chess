@@ -12,7 +12,7 @@ class GameState():
         ]
         self.whiteToMove = True
         self.moveLog = []
-        self.kingLocations = ((0, 4), (7,4)) #black -> white
+        self.kingLocations = [(0, 4), (7,4)] #black -> white
 
         self.moveFunctions = {
             "P" : self.getPawnMoves,
@@ -48,8 +48,49 @@ class GameState():
             elif move.peiceMoved == "wK":
                 self.kingLocations[1] = (move.startRow, move.startCol)
 
+
     def getValidMoves(self):
-        return self.getAllMoves()
+        moves = self.getAllMoves()
+        # print("white") if self.whiteToMove else "black"
+        # print(moves)
+
+        for i in range(len(moves)-1, -1, -1):
+            self.makeMove(moves[i])
+    
+
+            self.whiteToMove = not self.whiteToMove
+            if self.inCheck():
+                moves.remove(moves[i])
+                
+
+            self.whiteToMove = not self.whiteToMove
+            self.undoMove()
+
+        # print(moves)
+        return moves
+        
+    
+    def inCheck(self):
+
+        if self.whiteToMove:
+            return self.sqAttacked(self.kingLocations[1])
+        else:
+            return self.sqAttacked(self.kingLocations[0])
+
+    def sqAttacked(self, kl):
+
+        self.whiteToMove = not self.whiteToMove
+
+        oppsMoves = self.getAllMoves()
+
+        for m in oppsMoves:
+            if m.endRow == kl[0] and m.endCol == kl[1]:
+                self.whiteToMove = not self.whiteToMove
+                return True
+        
+        self.whiteToMove = not self.whiteToMove
+        return False
+        
 
     def getAllMoves(self):
         moves = []
@@ -115,6 +156,7 @@ class GameState():
 
                     if endPeice[0] == enemyColor:
                         moves.append(Move((r, c), (endRow, endCol), self.board))
+                        break
 
                     elif endPeice == "--":
                         moves.append(Move((r, c), (endRow, endCol), self.board))
@@ -168,6 +210,7 @@ class GameState():
 
                     if endPiece[0] == enemyColor:
                         moves.append(Move((r, c), (endRow, endCol), self.board))
+                        break
 
                     elif endPiece == "--":
                         moves.append(Move((r, c), (endRow, endCol), self.board))
