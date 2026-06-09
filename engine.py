@@ -13,6 +13,8 @@ class GameState():
         self.whiteToMove = True
         self.moveLog = []
         self.kingLocations = [(0, 4), (7,4)] #black -> white
+        self.checkMate = False
+        self.staleMate = False
 
         self.moveFunctions = {
             "P" : self.getPawnMoves,
@@ -51,8 +53,6 @@ class GameState():
 
     def getValidMoves(self):
         moves = self.getAllMoves()
-        # print("white") if self.whiteToMove else "black"
-        # print(moves)
 
         for i in range(len(moves)-1, -1, -1):
             self.makeMove(moves[i])
@@ -66,7 +66,18 @@ class GameState():
             self.whiteToMove = not self.whiteToMove
             self.undoMove()
 
-        # print(moves)
+        if len(moves) == 0:
+
+            if self.inCheck():
+                self.checkMate = True
+
+            else:
+                self.staleMate = True
+
+        else:
+            self.checkMate = False
+            self.staleMate = False
+            
         return moves
         
     
