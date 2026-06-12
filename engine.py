@@ -15,6 +15,9 @@ class GameState():
         self.kingLocations = [(0, 4), (7,4)] #black -> white
         self.checkMate = False
         self.staleMate = False
+        self.pins =[]
+        self.checks = []
+        # self.inCheck = False
 
         self.moveFunctions = {
             "P" : self.getPawnMoves,
@@ -115,6 +118,55 @@ class GameState():
                     self.moveFunctions[peice](r,c, moves)
 
         return moves
+    
+    def checkForChecksAndPins(self):
+        pins = []
+        checks = []
+        inCheck = False
+
+        if self.whiteToMove:
+            enemyColor = "b"
+            myColor = "w"
+            startRow = self.kingLocations[1][0]
+            startCol = self.kingLocations[1][1]
+
+        else:
+            enemyColor = "w"
+            myColor = "b"
+            startRow = self.kingLocations[0][0]
+            startCol = self.kingLocations[0][1]
+
+        directions = ((-1, 0), (0, -1), (1, 0), (0, 1), (-1, -1), (1, -1), (-1, 1), (1, 1))
+
+        for i in range(len(directions)):
+            d = directions[i]
+            possiblePin = ()
+
+            for j in range(1, 8):
+                endRow = startRow + d[0] * j
+                endCol = startCol + d[1] * j
+
+                if 0 <= endRow < 8 and 0 <= endCol < 8:
+                    endPiece = self.board[endRow][endCol]
+
+                    if endPiece[0] == myColor:
+                        if possiblePin == ():
+                            possiblePin = (endRow, endCol, d[0], d[1])
+
+                        else:
+                            break
+
+                    elif endPiece[0] == enemyColor:
+                        type = endPiece[1]
+
+
+
+
+
+
+
+
+
                     
     def getPawnMoves(self, r, c, moves):
         if self.whiteToMove:
