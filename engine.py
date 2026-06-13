@@ -17,7 +17,7 @@ class GameState():
         self.staleMate = False
         self.pins =[]
         self.checks = []
-        # self.inCheck = False
+        self.inCheck = False
 
         self.moveFunctions = {
             "P" : self.getPawnMoves,
@@ -158,6 +158,45 @@ class GameState():
 
                     elif endPiece[0] == enemyColor:
                         type = endPiece[1]
+
+                        if (0 <= i <=3 and type == "R") or \
+                            (4<= i <=7 and type == "B") or \
+                            (type == "Q") or \
+                            (i == 1 and type == "K") or \
+                            (i == 1 and type == "P" and ((enemyColor == "w" and 6<= i <=7) or (enemyColor == "b" and 4<= i <= 5))):
+                            
+                            if possiblePin == ():
+                                inCheck = True
+                                checks.append((endRow, endCol, d[0], d[1]))
+                                break
+                            else:
+                                pins.append(possiblePin)
+                                break
+
+                        else:
+                            break
+                
+                else:
+                    break
+
+        
+        knightMoves = ((-1, -2), (1, -2), (2, -1), (2, 1), (1, 2), (-1, 2), (-2, 1), (-2, -1))
+
+        for k in knightMoves:
+
+            endRow = startRow + k[0]
+            endCol = startCol + k[1]
+
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                endPiece = self.board[endRow][endCol]
+
+                if endPiece[0] == enemyColor and endPiece[1] == "N":
+                    inCheck = True
+                    checks.append((endRow, endCol, k[0], k[1]))
+
+        return inCheck, pins, checks
+
+
 
 
 
