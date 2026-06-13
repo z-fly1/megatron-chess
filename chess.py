@@ -49,13 +49,14 @@ def main():
                 if len(playerMove) == 2:
                     move = m(playerMove[0], playerMove[1], gs.board)
                     move.getChessNotaion(playerMove[0], playerMove[1], gs.board)
-                    if move in validMoves:
-                        gs.makeMove(move)
-                        moveMade = True
-                        sqSelected = ()
-                        playerMove = []
+                    for i in range(len(validMoves)):
+                        if move == validMoves[i]:
+                            gs.makeMove(validMoves[i])
+                            moveMade = True
+                            sqSelected = ()
+                            playerMove = []
 
-                    else:
+                    if not moveMade:
                         playerMove = [sqSelected]
             
 
