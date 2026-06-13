@@ -53,34 +53,87 @@ class GameState():
             elif move.peiceMoved == "wK":
                 self.kingLocations[1] = (move.startRow, move.startCol)
 
+# old valid moves function
+    # def getValidMoves(self):
+    #     moves = self.getAllMoves()
 
-    def getValidMoves(self):
-        moves = self.getAllMoves()
-
-        for i in range(len(moves)-1, -1, -1):
-            self.makeMove(moves[i])
+    #     for i in range(len(moves)-1, -1, -1):
+    #         self.makeMove(moves[i])
     
 
-            self.whiteToMove = not self.whiteToMove
-            if self.inCheck():
-                moves.remove(moves[i])
+    #         self.whiteToMove = not self.whiteToMove
+    #         if self.inCheck():
+    #             moves.remove(moves[i])
                 
 
-            self.whiteToMove = not self.whiteToMove
-            self.undoMove()
+    #         self.whiteToMove = not self.whiteToMove
+    #         self.undoMove()
 
-        if len(moves) == 0:
+    #     if len(moves) == 0:
 
-            if self.inCheck():
-                self.checkMate = True
+    #         if self.inCheck():
+    #             self.checkMate = True
 
-            else:
-                self.staleMate = True
+    #         else:
+    #             self.staleMate = True
+
+    #     else:
+    #         self.checkMate = False
+    #         self.staleMate = False
+            
+    #     return moves
+
+    def getValidMoves(self):
+        moves = []
+
+        self.inCheck, self.pins, self.checks = self.checkForChecksAndPins()
+
+        if self.whiteToMove:
+            kR = self.kingLocations[1][0]
+            kC = self.kingLocations[1][1]
 
         else:
-            self.checkMate = False
-            self.staleMate = False
-            
+            kR = self.kingLocations[0][0]
+            kC = self.kingLocations[0][1]
+
+        
+        if self.inCheck:
+            if (len(self.checks) == 1):
+                moves = self.getAllMoves()
+
+                check = self.checks[0]
+                checkRow = check[0]
+                checkCol = check[1]
+
+                checkingPiece = self.board[checkRow][checkCol]
+
+                validSquares = []
+
+                if checkingPiece[1] == "N":
+                    validSquares = [(checkRow, checkCol)]
+
+                else:
+
+                    for i in range(1, 8):
+                        validSquare = (kR + check[2] * i, kC + check[3] * i)
+                        validSquares.append(validSquare)
+
+                        if validSquare[0] == checkRow and validSquare[1] == checkCol:
+                            break
+
+
+                for i in range(len(moves), -1, -1, -1):
+                    if moves[i].peiceMoved[1] != "K" :
+                        if not (moves[i].endRow, moves[i].endCol) in validSquares:
+                            moves.remove(moves[i])
+
+            else:
+                self.getKingMoves(kR, kC, moves)
+
+        else:
+            moves = self.getAllMoves()
+                
+        
         return moves
         
     
