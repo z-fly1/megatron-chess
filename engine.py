@@ -41,6 +41,16 @@ class GameState():
         if move.isPawnPromotion:
             self.board[move.endRow][move.endCol] = move.peiceMoved[0] + "Q" #always promote to a queen for now
 
+        if move.isEnpassant:
+            self.board[move.startRow][move.endCol] = "--"
+
+        if move.peiceMoved[1] == "P" and (move.endRow - move.startRow) == 2:
+            self.enpassant = ((move.startRow + move.endRow)//2, move.startCol)
+
+        else:
+            self.enpassant = ()
+
+
     def undoMove(self):
         if len(self.moveLog) != 0:
             move = self.moveLog.pop()
@@ -294,8 +304,6 @@ class Move():
             self.isPawnPromotion = True
 
         self.isEnpassant = isEnpassant
-        if self.peiceMoved[1] == "P" and (self.endRow, self.endCol) == enpassant:
-            self.isEnpassant = True
         
 
     def __eq__(self, other):
