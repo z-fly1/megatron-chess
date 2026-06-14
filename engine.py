@@ -37,6 +37,9 @@ class GameState():
         elif move.peiceMoved == "wK":
             self.kingLocations[1] = (move.endRow, move.endCol)
 
+        if move.isPawnPromotion:
+            self.board[move.endRow][move.endCol] = move.peiceMoved[0] + "Q" #always promote to a queen for now
+
     def undoMove(self):
         if len(self.moveLog) != 0:
             move = self.moveLog.pop()
