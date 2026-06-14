@@ -133,9 +133,14 @@ class GameState():
                 if self.board[r-1][c-1][0] == "b":
                     moves.append(Move((r, c), (r-1, c-1), self.board))
 
+                elif (r-1, c-1) == self.enpassant:
+                    moves.append(Move((r, c), (r-1, c-1), self.board, isEnpassant=True))
+
             if c+1 <= 7:
                 if self.board[r-1][c+1][0] == "b":
                     moves.append(Move((r, c), (r-1, c+1), self.board))
+                elif (r-1, c+1) == self.enpassant:
+                    moves.append(Move((r, c), (r-1, c+1), self.board, isEnpassant=True))
 
         else:
             if self.board[r+1][c] == "--":
@@ -143,14 +148,19 @@ class GameState():
 
                 if r == 1 and self.board[r+2][c] == "--":
                     moves.append(Move((r,c), (r+2, c), self.board))
+                
 
             if c-1 >=0:
                 if self.board[r+1][c-1][0] == "w":
                     moves.append(Move((r,c), (r+1, c-1), self.board))
+                elif (r+1, c-1) == self.enpassant:
+                    moves.append(Move((r, c), (r+1, c-1), self.board, isEnpassant=True))
 
             if c+1 <= 7:
                 if self.board[r+1][c+1][0] == "w":
                     moves.append(Move((r,c), (r+1, c+1), self.board))
+                elif (r+1, c-1) == self.enpassant:
+                    moves.append(Move((r, c), (r+1, c+1), self.board, isEnpassant=True))
 
     def getRookMoves(self, r, c, moves):
 
@@ -267,7 +277,7 @@ class GameState():
 
 
 class Move():
-    def __init__(self, sqStart, sqEnd, board, enpassant = ()):
+    def __init__(self, sqStart, sqEnd, board, isEnpassant=False):
         self.startRow = sqStart[0]
         self.startCol = sqStart[1]
         self.endRow = sqEnd[0]
@@ -283,7 +293,7 @@ class Move():
         if (self.peiceMoved == "wP" and self.endRow == 0) or (self.peiceMoved == "bP" and self.endRow == 7):
             self.isPawnPromotion = True
 
-        self.isEnpassant = False
+        self.isEnpassant = isEnpassant
         if self.peiceMoved[1] == "P" and (self.endRow, self.endCol) == enpassant:
             self.isEnpassant = True
         
