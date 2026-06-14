@@ -313,6 +313,11 @@ class Move():
             self.isPawnPromotion = True
 
         self.isEnpassant = isEnpassant
+        if isEnpassant:
+            if self.peiceMoved == "bP":
+                self.peiceCaptured = "wP"
+            else:
+                self.peiceCaptured = "bP"
         
 
     def __eq__(self, other):
