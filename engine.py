@@ -15,6 +15,7 @@ class GameState():
         self.kingLocations = [(0, 4), (7,4)] #black -> white
         self.checkMate = False
         self.staleMate = False
+        self.enpassant = ()
 
         self.moveFunctions = {
             "P" : self.getPawnMoves,
@@ -266,7 +267,7 @@ class GameState():
 
 
 class Move():
-    def __init__(self, sqStart, sqEnd, board):
+    def __init__(self, sqStart, sqEnd, board, enpassant = ()):
         self.startRow = sqStart[0]
         self.startCol = sqStart[1]
         self.endRow = sqEnd[0]
@@ -281,6 +282,10 @@ class Move():
         self.isPawnPromotion = False
         if (self.peiceMoved == "wP" and self.endRow == 0) or (self.peiceMoved == "bP" and self.endRow == 7):
             self.isPawnPromotion = True
+
+        self.isEnpassant = False
+        if self.peiceMoved[1] == "P" and (self.endRow, self.endCol) == enpassant:
+            self.isEnpassant = True
         
 
     def __eq__(self, other):
