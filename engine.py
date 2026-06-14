@@ -275,6 +275,11 @@ class Move():
 
         self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
 
+        self.isPawnPromotion = False
+        if (self.peiceMoved == "wP" and self.endRow == 0) or (self.peiceMoved == "bP" and self.endRow == 7):
+            self.isPawnPromotion = True
+        
+
     def __eq__(self, other):
         if isinstance(other, Move):
             return self.moveID == other.moveID
