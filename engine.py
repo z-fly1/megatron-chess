@@ -44,7 +44,7 @@ class GameState():
         if move.isEnpassant:
             self.board[move.startRow][move.endCol] = "--"
 
-        if move.peiceMoved[1] == "P" and (move.endRow - move.startRow) == 2:
+        if move.peiceMoved[1] == "P" and abs(move.endRow - move.startRow) == 2:
             self.enpassant = ((move.startRow + move.endRow)//2, move.startCol)
 
         else:
@@ -64,9 +64,18 @@ class GameState():
             elif move.peiceMoved == "wK":
                 self.kingLocations[1] = (move.startRow, move.startCol)
 
+            if move.isEnpassant:
+                self.board[move.endRow][move.endCol] = "--"
+                self.board[move.startRow][move.endCol] = move.peiceCaptured
+                self.enpassant = (move.endRow, move.endCol)
+
+            if move.peiceMoved[1] == "P" and abs(move.endRow - move.startRow) == 2:
+                self.enpassant = ()
+
 
     def getValidMoves(self):
         moves = self.getAllMoves()
+        tempEnpassant = self.enpassant
 
         for i in range(len(moves)-1, -1, -1):
             self.makeMove(moves[i])
@@ -91,7 +100,7 @@ class GameState():
         else:
             self.checkMate = False
             self.staleMate = False
-            
+        self.enpassant = tempEnpassant
         return moves
         
     
