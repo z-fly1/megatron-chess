@@ -78,7 +78,7 @@ def drawGame(screen, gs):
     drawPeice(screen, gs.board)
 
 def drawBoard(screen):
-    colors = [p.Color("white"), p.Color("grey")]
+    colors = [p.Color("#DCCFC0"), p.Color("#5C6B4F")]
 
     for r in range(DIMENTION):
         for c in range(DIMENTION):
