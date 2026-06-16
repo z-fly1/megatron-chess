@@ -16,6 +16,8 @@ class GameState():
         self.checkMate = False
         self.staleMate = False
         self.enpassant = ()
+        self.currentCastlingRight = CastleRights(True, True, True, True)
+        self.castleRightLog = [CastleRights(self.currentCastlingRight.wks, self.currentCastlingRight.bks, self.currentCastlingRight.wqs, self.currentCastlingRight.bqs)]
 
         self.moveFunctions = {
             "P" : self.getPawnMoves,
@@ -50,6 +52,10 @@ class GameState():
         else:
             self.enpassant = ()
 
+        self.updateCastleRights(move)
+        self.castleRightLog.append(CastleRights(self.currentCastlingRight.wks, self.currentCastlingRight.bks, 
+                                                self.currentCastlingRight.wqs, self.currentCastlingRight.bqs))
+
 
     def undoMove(self):
         if len(self.moveLog) != 0:
@@ -72,6 +78,37 @@ class GameState():
             if move.peiceMoved[1] == "P" and abs(move.endRow - move.startRow) == 2:
                 self.enpassant = ()
 
+            self.castleRightLog.pop()
+            lastCastleRight = self.castleRightLog[-1]
+            self.currentCastlingRight.bks = lastCastleRight.bks
+            self.currentCastlingRight.bqs = lastCastleRight.bqs
+            self.currentCastlingRight.wks = lastCastleRight.wks
+            self.currentCastlingRight.wqs = lastCastleRight.wqs
+
+    def updateCastleRights(self, move):
+        if move.peiceMoved == "wK":
+            self.currentCastlingRight.wqs = False
+            self.currentCastlingRight.wks = False
+
+        elif move.peiceMoved == "bK":
+            self.currentCastlingRight.bqs = False
+            self.currentCastlingRight.bks = False
+
+        elif move.peiceMoved == "wR":
+            if move.startRow == 7:
+                if move.startCol == 0:
+                    self.currentCastlingRight.wqs = False
+                elif move.startCol == 7:
+                    self.currentCastlingRight.wks = False
+
+        elif move.peiceMoved == "bR":
+            if move.startRow == 0:
+                if move.startCol == 0:
+                    self.currentCastlingRight.bqs = False
+                elif move.startCol == 7:
+                    self.currentCastlingRight.bks = False
+
+        
 
     def getValidMoves(self):
         moves = self.getAllMoves()
@@ -292,6 +329,15 @@ class GameState():
 
                 elif endPiece == "--":
                     moves.append(Move((r, c), (endRow, endCol), self.board))
+
+
+class CastleRights():
+    def __init__(self, wks, bks, wqs,bqs):
+        self.wks = wks
+        self.bks = bks
+        self.wqs = wqs
+        self.bqs = bqs
+
 
 
 
