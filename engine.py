@@ -133,6 +133,13 @@ class GameState():
         moves = self.getAllMoves()
         tempEnpassant = self.enpassant
 
+        if self.whiteToMove:
+            self.getCastleMoves(self.kingLocations[1][0], self.kingLocations[1][1], moves)
+
+        else:
+            self.getCastleMoves(self.kingLocations[0][0], self.kingLocations[0][1], moves)
+            
+
         for i in range(len(moves)-1, -1, -1):
             self.makeMove(moves[i])
     
@@ -349,30 +356,29 @@ class GameState():
                 elif endPiece == "--":
                     moves.append(Move((r, c), (endRow, endCol), self.board))
 
-        self.getCastleMoves(r, c, moves, enemyColor)
 
-    def getCastleMoves(self, r, c, moves, enemyColor):
+    def getCastleMoves(self, r, c, moves,):
         if self.inCheck():
             return
         
         if (self.whiteToMove and self.currentCastlingRight.wks) or (not self.whiteToMove and self.currentCastlingRight.bks):
-            self.getKingSideCastleMoves(r, c, moves, enemyColor)
+            self.getKingSideCastleMoves(r, c, moves)
 
         if (self.whiteToMove and self.currentCastlingRight.wqs) or (not self.whiteToMove and self.currentCastlingRight.bqs):
-            self.getQueenSideCastleMoves(r, c, moves, enemyColor)
+            self.getQueenSideCastleMoves(r, c, moves)
         
 
-    def getKingSideCastleMoves(self, r, c, moves, enemyColor):
+    def getKingSideCastleMoves(self, r, c, moves):
         if self.board[r][c+1] == "--" and self.board[r][c+2] == "--":
 
-            if not self.sqAttacked(r, c+1) and not self.sqAttacked(r, c+2):
+            if not self.sqAttacked((r, c+1)) and not self.sqAttacked((r, c+2)):
                 moves.append(Move((r, c), (r, c+2), self.board, isCastle=True))
             
 
-    def getQueenSideCastleMoves(self, r, c, moves, enemyColor):
+    def getQueenSideCastleMoves(self, r, c, moves):
         if self.board[r][c-1] == "--" and self.board[r][c-2] == "--" and self.board[r][c-3] == "--":
 
-            if not self.sqAttacked(r, c-1) and not self.sqAttacked(r, c-2):
+            if not self.sqAttacked((r, c-1)) and not self.sqAttacked((r, c-2)):
                 moves.append(Move((r, c), (r, c-2), self.board, isCastle=True))
 
         
