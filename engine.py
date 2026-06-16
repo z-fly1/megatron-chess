@@ -52,6 +52,16 @@ class GameState():
         else:
             self.enpassant = ()
 
+        if move.isCastle:
+
+            if move.endCol - move.startCol == 2:
+                self.board[move.endRow][move.endCol - 1] = self.board[move.endRow][move.endCol + 1]
+                self.board[move.endRow][move.endCol + 1] = "--"
+
+            else:
+                self.board[move.endRow][move.endCol + 1] = self.board[move.endRow][move.endCol - 2]
+                self.board[move.endRow][move.endCol - 2] = "--"
+
         self.updateCastleRights(move)
         self.castleRightLog.append(CastleRights(self.currentCastlingRight.wks, self.currentCastlingRight.bks, 
                                                 self.currentCastlingRight.wqs, self.currentCastlingRight.bqs))
@@ -330,6 +340,35 @@ class GameState():
                 elif endPiece == "--":
                     moves.append(Move((r, c), (endRow, endCol), self.board))
 
+        self.getCastleMoves(r, c, moves, enemyColor)
+
+    def getCastleMoves(self, r, c, moves, enemyColor):
+        if self.inCheck():
+            return
+        
+        if (self.whiteToMove and self.currentCastlingRight.wks) or (not self.whiteToMove and self.currentCastlingRight.bks):
+            self.getKingSideCastleMoves(r, c, moves, enemyColor)
+
+        if (self.whiteToMove and self.currentCastlingRight.wqs) or (not self.whiteToMove and self.currentCastlingRight.bqs):
+            self.getQueenSideCastleMoves(r, c, moves, enemyColor)
+        
+
+    def getKingSideCastleMoves(self, r, c, moves, enemyColor):
+        if self.board[r][c+1] == "--" and self.board[r][c+2] == "--":
+
+            if not self.sqAttacked(r, c+1) and not self.sqAttacked(r, c+2):
+                moves.append(Move((r, c), (r, c+2), self.board, isCastle=True))
+            
+
+    def getQueenSideCastleMoves(self, r, c, moves, enemyColor):
+        if self.board[r][c-1] == "--" and self.board[r][c-2] == "--" and self.board[r][c-3] == "--":
+
+            if not self.sqAttacked(r, c-1) and not self.sqAttacked(r, c-2):
+                moves.append(Move((r, c), (r, c-2), self.board, isCastle=True))
+
+        
+
+
 
 class CastleRights():
     def __init__(self, wks, bks, wqs,bqs):
@@ -342,7 +381,7 @@ class CastleRights():
 
 
 class Move():
-    def __init__(self, sqStart, sqEnd, board, isEnpassant=False):
+    def __init__(self, sqStart, sqEnd, board, isEnpassant=False, isCastle=False):
         self.startRow = sqStart[0]
         self.startCol = sqStart[1]
         self.endRow = sqEnd[0]
@@ -364,6 +403,9 @@ class Move():
                 self.peiceCaptured = "wP"
             else:
                 self.peiceCaptured = "bP"
+
+        self.isCastle = isCastle
+
         
 
     def __eq__(self, other):
