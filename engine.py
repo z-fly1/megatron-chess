@@ -132,6 +132,7 @@ class GameState():
     def getValidMoves(self):
         moves = self.getAllMoves()
         tempEnpassant = self.enpassant
+        tempCurrentCastlingRight = self.currentCastlingRight
 
         if self.whiteToMove:
             self.getCastleMoves(self.kingLocations[1][0], self.kingLocations[1][1], moves)
@@ -163,7 +164,11 @@ class GameState():
         else:
             self.checkMate = False
             self.staleMate = False
+
+
         self.enpassant = tempEnpassant
+        self.currentCastlingRight = tempCurrentCastlingRight
+
         return moves
         
     
