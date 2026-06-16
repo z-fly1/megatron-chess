@@ -95,6 +95,15 @@ class GameState():
             self.currentCastlingRight.wks = lastCastleRight.wks
             self.currentCastlingRight.wqs = lastCastleRight.wqs
 
+            if move.isCastle:
+                if move.endCol - move.startCol == 2:
+                    self.board[move.endRow][move.endCol + 1] = self.board[move.endRow][move.endCol - 1]
+                    self.board[move.endRow][move.endCol - 1] = "--"
+
+                else:
+                    self.board[move.endRow][move.endCol - 2] = self.board[move.endRow][move.endCol + 1]
+                    self.board[move.endRow][move.endCol + 1] = "--"
+
     def updateCastleRights(self, move):
         if move.peiceMoved == "wK":
             self.currentCastlingRight.wqs = False
