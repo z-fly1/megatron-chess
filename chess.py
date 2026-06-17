@@ -71,11 +71,35 @@ def main():
 
         clock.tick(MAX_FPS)
         p.display.flip()
-        drawGame(screen, gs)
+        drawGame(screen, gs, validMoves, sqSelected)
 
-def drawGame(screen, gs):
+def drawGame(screen, gs, validMoves, sqSelected):
     drawBoard(screen)
+    highlightSquare(screen, gs, validMoves, sqSelected)
     drawPeice(screen, gs.board)
+   
+
+def highlightSquare(screen, gs, validMoves, sqSelected):
+    if sqSelected != ():
+        r, c = sqSelected
+
+        if gs.board[r][c][0] == ("w" if gs.whiteToMove else "b" ):
+
+            s = p.Surface((SQ_SIZE, SQ_SIZE))
+            s.set_alpha(150)
+            s.fill(p.Color('#94A684'))
+            screen.blit(s, (c*SQ_SIZE, r*SQ_SIZE))
+            s.fill(p.Color('#C89B3C'))
+            for move in validMoves:
+                if move.startRow == r and move.startCol == c:
+                    s.fill(p.Color('#C89B3C'))
+                    if gs.board[move.endRow][move.endCol] != "==" and gs.board[move.endRow][move.endCol][0] == ("b" if gs.whiteToMove else "w"):
+                        s.fill(p.Color('#A66A5B'))
+                    
+                    screen.blit(s, (move.endCol*SQ_SIZE, move.endRow*SQ_SIZE))
+                    
+
+
 
 def drawBoard(screen):
     colors = [p.Color("#DCCFC0"), p.Color("#5C6B4F")]
