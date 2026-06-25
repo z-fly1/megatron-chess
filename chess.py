@@ -69,6 +69,16 @@ def main():
                     animate = False
                     moveMade = True
 
+                if e.key == p.K_r:
+                    gs = GameState()
+                    validMoves = gs.getValidMoves()
+                    sqSelected = ()
+                    playerMove = []
+                    moveMade = False
+                    animate = False
+
+
+
         if moveMade:
             if animate:
                 animateMove(gs.moveLog[-1], screen, gs.board, clock)
