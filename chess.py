@@ -34,6 +34,14 @@ def main():
 
     animate = False
     gameOver = False
+
+    move_sfx = p.mixer.Sound('sounds/move-self.mp3')
+    capture_sfx = p.mixer.Sound('sounds/capture.mp3')
+    gameover_sfx = p.mixer.Sound('sounds/game-end.mp3')
+    promote_sfx = p.mixer.Sound('sounds/promote.mp3')
+    castle_sfx = p.mixer.Sound('sounds/castle.mp3')
+    check_sfx = p.mixer.Sound('sounds/move-check.mp3')
+
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
@@ -56,6 +64,26 @@ def main():
                         for i in range(len(validMoves)):
                             if move == validMoves[i]:
                                 gs.makeMove(validMoves[i])
+
+                                sfx = move_sfx
+
+                                if validMoves[i].peiceCaptured != "--":
+                                    sfx = capture_sfx
+                                
+                                elif validMoves[i].isCastle:
+                                    sfx = castle_sfx
+
+                                elif validMoves[i].isPawnPromotion:
+                                    sfx = promote_sfx
+
+                                elif gs.checkMate or gs.staleMate:
+                                    sfx = gameover_sfx
+                                
+                                elif gs.inCheck():
+                                    sfx = check_sfx
+                                
+                                sfx.play()
+
                                 moveMade = True
                                 animate = True
                                 sqSelected = ()
@@ -102,6 +130,7 @@ def main():
 
         elif gs.staleMate:
             gameOver = True
+            gameover_sfx.play()
             drawText(screen, "Stalemate")
 
 def drawGame(screen, gs, validMoves, sqSelected):
