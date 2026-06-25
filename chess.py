@@ -66,6 +66,7 @@ def main():
                     moveMade = True
 
         if moveMade:
+            animateMove(gs.moveLog[-1], screen, gs.board, clock)
             validMoves = gs.getValidMoves()
             moveMade = False
 
@@ -102,6 +103,7 @@ def highlightSquare(screen, gs, validMoves, sqSelected):
 
 
 def drawBoard(screen):
+    global colors
     colors = [p.Color("#DCCFC0"), p.Color("#5C6B4F")]
 
     for r in range(DIMENTION):
@@ -116,6 +118,36 @@ def drawPeice(screen, board):
             peice = board[r][c]
             if peice != "--":
                 screen.blit(IMAGES[peice], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+def animateMove(move, screen, board, clock):
+    global colors
+    animationCoordinates = []
+
+    dR = move.endRow - move.startRow
+    dC = move.endCol - move.startCol
+
+    fps = 5
+
+    frameCount = (abs(dR) + abs(dC)) * fps
+
+    for f in range(frameCount + 1):
+        r,c = (move.startRow + dR * f/frameCount, move.startCol + dC * f/frameCount)
+        drawBoard(screen)
+        drawPeice(screen, board)
+
+        color = colors[((move.endRow+move.endCol)%2)]
+
+        endSquare = p.Rect(move.endCol * SQ_SIZE, move.endRow * SQ_SIZE, SQ_SIZE, SQ_SIZE)
+        p.draw.rect(screen, color, endSquare)
+
+
+        if move.peiceCaptured != "--":
+            screen.blit(IMAGES[move.peiceCaptured], endSquare)
+
+        screen.blit(IMAGES[move.peiceMoved], p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
+        p.display.flip()
+        clock.tick(60)
+
 
 
 if __name__ == "__main__":
