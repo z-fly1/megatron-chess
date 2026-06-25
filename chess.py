@@ -64,26 +64,6 @@ def main():
                         for i in range(len(validMoves)):
                             if move == validMoves[i]:
                                 gs.makeMove(validMoves[i])
-
-                                sfx = move_sfx
-
-                                if validMoves[i].peiceCaptured != "--":
-                                    sfx = capture_sfx
-                                
-                                elif validMoves[i].isCastle:
-                                    sfx = castle_sfx
-
-                                elif validMoves[i].isPawnPromotion:
-                                    sfx = promote_sfx
-
-                                elif gs.checkMate or gs.staleMate:
-                                    sfx = gameover_sfx
-                                
-                                elif gs.inCheck():
-                                    sfx = check_sfx
-                                
-                                sfx.play()
-
                                 moveMade = True
                                 animate = True
                                 sqSelected = ()
@@ -113,6 +93,30 @@ def main():
             if animate:
                 animateMove(gs.moveLog[-1], screen, gs.board, clock)
             validMoves = gs.getValidMoves()
+
+            if move.peiceCaptured != "--":
+                capture_sfx.play()
+                                
+            elif move.isCastle:
+                castle_sfx.play()
+
+            elif move.isPawnPromotion:
+                promote_sfx.play()
+
+            elif gs.checkMate and not gameOver:
+                gameOver = True
+                gameover_sfx.play()
+
+            elif gs.staleMate and not gameOver:
+                gameOver = True
+                gameover_sfx.play()
+                                
+            elif gs.inCheck():
+                check_sfx.play()
+
+            else:
+                move_sfx.play()
+
             moveMade = False
             animate = False
 
@@ -121,7 +125,6 @@ def main():
         drawGame(screen, gs, validMoves, sqSelected)
 
         if gs.checkMate:
-            gameOver = True
             if gs.whiteToMove:
                 drawText(screen, "Black wins by checkmate")
 
@@ -129,8 +132,6 @@ def main():
                 drawText(screen, "White wins by checkmate")
 
         elif gs.staleMate:
-            gameOver = True
-            gameover_sfx.play()
             drawText(screen, "Stalemate")
 
 def drawGame(screen, gs, validMoves, sqSelected):
