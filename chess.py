@@ -31,6 +31,8 @@ def main():
     running = True
     sqSelected = ()
     playerMove = []
+
+    animate = False
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
@@ -53,6 +55,7 @@ def main():
                         if move == validMoves[i]:
                             gs.makeMove(validMoves[i])
                             moveMade = True
+                            animate = True
                             sqSelected = ()
                             playerMove = []
 
@@ -63,12 +66,15 @@ def main():
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z:
                     gs.undoMove()
+                    animate = False
                     moveMade = True
 
         if moveMade:
-            animateMove(gs.moveLog[-1], screen, gs.board, clock)
+            if animate:
+                animateMove(gs.moveLog[-1], screen, gs.board, clock)
             validMoves = gs.getValidMoves()
             moveMade = False
+            animate = False
 
         clock.tick(MAX_FPS)
         p.display.flip()
