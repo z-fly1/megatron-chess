@@ -1,6 +1,7 @@
 import pygame as p
 from engine import GameState
 from engine import Move as m
+import math
 
 WIDTH = HEIGHT = 512
 DIMENTION = 8
@@ -186,9 +187,12 @@ def animateMove(move, screen, board, clock):
     dR = move.endRow - move.startRow
     dC = move.endCol - move.startCol
 
-    fps = 5
+    squaresMoved = math.sqrt(dR**2 + dC**2)
 
-    frameCount = (abs(dR) + abs(dC)) * fps
+    fps = 4
+
+    frameCount = max(1, int(squaresMoved * fps))
+
 
     for f in range(frameCount + 1):
         r,c = (move.startRow + dR * f/frameCount, move.startCol + dC * f/frameCount)
