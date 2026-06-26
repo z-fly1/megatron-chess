@@ -45,7 +45,7 @@ def main():
     check_sfx = p.mixer.Sound('sounds/move-check.mp3')
 
     playerOne = False #its human
-    playerTwo = True #its ai
+    playerTwo = False #its ai
 
     while running:
 
@@ -110,28 +110,28 @@ def main():
                 animateMove(gs.moveLog[-1], screen, gs.board, clock)
             validMoves = gs.getValidMoves()
 
-            if move.peiceCaptured != "--":
-                capture_sfx.play()
+            # if move.peiceCaptured != "--":
+            #     capture_sfx.play()
                                 
-            elif move.isCastle:
-                castle_sfx.play()
+            # elif move.isCastle:
+            #     castle_sfx.play()
 
-            elif move.isPawnPromotion:
-                promote_sfx.play()
+            # elif move.isPawnPromotion:
+            #     promote_sfx.play()
 
-            elif gs.checkMate and not gameOver:
-                gameOver = True
-                gameover_sfx.play()
+            # elif gs.checkMate and not gameOver:
+            #     gameOver = True
+            #     gameover_sfx.play()
 
-            elif gs.staleMate and not gameOver:
-                gameOver = True
-                gameover_sfx.play()
+            # elif gs.staleMate and not gameOver:
+            #     gameOver = True
+            #     gameover_sfx.play()
                                 
-            elif gs.inCheck():
-                check_sfx.play()
+            # elif gs.inCheck():
+            #     check_sfx.play()
 
-            else:
-                move_sfx.play()
+            # else:
+            #     move_sfx.play()
 
             moveMade = False
             animate = False
@@ -142,12 +142,14 @@ def main():
 
         if gs.checkMate:
             if gs.whiteToMove:
+                gameOver = True
                 drawText(screen, "Black wins by checkmate")
 
             else:
                 drawText(screen, "White wins by checkmate")
 
         elif gs.staleMate:
+            gameOver = True
             drawText(screen, "Stalemate")
 
 def drawGame(screen, gs, validMoves, sqSelected):
