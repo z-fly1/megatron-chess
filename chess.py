@@ -99,7 +99,9 @@ def main():
 
         #computer moves
         if not gameOver and not isHumanTurn:
-            computerMove = megatron.findRandomMove(validMoves)
+            computerMove = megatron.findBestMove(gs, validMoves)
+            if computerMove is None:
+                computerMove = megatron.findRandomMove(validMoves)
             gs.makeMove(computerMove)
             moveMade = True
             animate = True
