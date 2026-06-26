@@ -2,6 +2,7 @@ import pygame as p
 from engine import GameState
 from engine import Move as m
 import math
+import megatron
 
 WIDTH = HEIGHT = 512
 DIMENTION = 8
@@ -43,12 +44,19 @@ def main():
     castle_sfx = p.mixer.Sound('sounds/castle.mp3')
     check_sfx = p.mixer.Sound('sounds/move-check.mp3')
 
+    playerOne = False #its human
+    playerTwo = True #its ai
+
     while running:
+
+        isHumanTurn = (gs.whiteToMove and playerOne) or (not gs.whiteToMove and playerTwo)
+
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
             elif e.type == p.MOUSEBUTTONDOWN:
-                if not gameOver:
+
+                if not gameOver and isHumanTurn:
                     location = p.mouse.get_pos()
                     col = int(location[0]//SQ_SIZE)
                     row = int(location[1] // SQ_SIZE)
@@ -88,6 +96,13 @@ def main():
                     moveMade = False
                     animate = False
 
+
+        #computer moves
+        if not gameOver and not isHumanTurn:
+            computerMove = megatron.findRandomMove(validMoves)
+            gs.makeMove(computerMove)
+            moveMade = True
+            animate = True
 
 
         if moveMade:
