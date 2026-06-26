@@ -44,7 +44,7 @@ def main():
     castle_sfx = p.mixer.Sound('sounds/castle.mp3')
     check_sfx = p.mixer.Sound('sounds/move-check.mp3')
 
-    playerOne = False #its human
+    playerOne = True #its human
     playerTwo = False #its ai
 
     while running:
@@ -112,28 +112,29 @@ def main():
                 animateMove(gs.moveLog[-1], screen, gs.board, clock)
             validMoves = gs.getValidMoves()
 
-            # if move.peiceCaptured != "--":
-            #     capture_sfx.play()
                                 
-            # elif move.isCastle:
-            #     castle_sfx.play()
+            if move.isCastle:
+                castle_sfx.play()
 
-            # elif move.isPawnPromotion:
-            #     promote_sfx.play()
+            elif move.isPawnPromotion:
+                promote_sfx.play()
 
-            # elif gs.checkMate and not gameOver:
-            #     gameOver = True
-            #     gameover_sfx.play()
+            elif gs.checkMate and not gameOver:
+                gameOver = True
+                gameover_sfx.play()
 
-            # elif gs.staleMate and not gameOver:
-            #     gameOver = True
-            #     gameover_sfx.play()
+            elif gs.staleMate and not gameOver:
+                gameOver = True
+                gameover_sfx.play()
                                 
-            # elif gs.inCheck():
-            #     check_sfx.play()
+            elif gs.inCheck():
+                check_sfx.play()
 
-            # else:
-            #     move_sfx.play()
+            elif move.peiceCaptured != "--":
+                capture_sfx.play()
+
+            else:
+                move_sfx.play()
 
             moveMade = False
             animate = False
@@ -143,8 +144,8 @@ def main():
         drawGame(screen, gs, validMoves, sqSelected)
 
         if gs.checkMate:
+            gameOver = True
             if gs.whiteToMove:
-                gameOver = True
                 drawText(screen, "Black wins by checkmate")
 
             else:
