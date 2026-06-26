@@ -8,7 +8,30 @@ def findRandomMove(validMoves):
     return validMoves[random.randint(0, len(validMoves) - 1)]
 
 def findBestMove(gs, validMoves):
-    return
+    maxScore = -CHECKMATE
+    bestMove = None
+
+    turnMultiplyer = 1 if gs.whiteToMove else -1
+
+
+    for playerMove in validMoves:
+        gs.makeMove(playerMove)
+
+        if gs.checkMate:
+            score = turnMultiplyer * CHECKMATE
+
+        elif gs.staleMate:
+            score = STALEMATE
+        else:
+            score = turnMultiplyer * scoreMaterial(gs.board)
+
+        if score > maxScore:
+            maxScore = score
+            bestMove = playerMove
+
+        gs.undoMove()
+
+    return bestMove
 
 def scoreMaterial(board):
     score = 0
