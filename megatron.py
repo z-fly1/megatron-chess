@@ -17,6 +17,8 @@ def findBestMove(gs, validMoves):
     for playerMove in validMoves:
         gs.makeMove(playerMove)
 
+        opponentMoves = gs.getValidMoves()
+
         if gs.checkMate:
             score = turnMultiplyer * CHECKMATE
 
