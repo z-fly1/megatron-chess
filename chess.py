@@ -95,6 +95,7 @@ def main():
                     playerMove = []
                     moveMade = False
                     animate = False
+                    gameOver = False
 
 
         #computer moves
