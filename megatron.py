@@ -3,6 +3,7 @@ import random
 materialScore = {"K": 0, "Q": 9, "B": 3, "N": 3, "R": 5, "P" : 1}
 CHECKMATE = 1000
 STALEMATE = 0
+DEPTH = 2
 
 def findRandomMove(validMoves):
     return validMoves[random.randint(0, len(validMoves) - 1)]
@@ -51,6 +52,21 @@ def findBestMove(gs, validMoves):
         gs.undoMove()
 
     return bestPlayerMove
+
+#make the first reccursive call
+def findMinMaxBestMove(gs, validMoves):
+    global nextMove
+    nextMove = None
+    findMinMaxMove(gs, validMoves, DEPTH, gs.whiteToMove)
+    return nextMove
+
+
+def findMinMaxMove(gs, validMoves, depth, whiteToMove):
+    global nextMove
+
+    if depth == 0:
+        return scoreMaterial(gs.board)
+
 
 def scoreMaterial(board):
     score = 0
