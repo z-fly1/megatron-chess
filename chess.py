@@ -113,28 +113,28 @@ def main():
             validMoves = gs.getValidMoves()
 
                                 
-            if move.isCastle:
-                castle_sfx.play()
+            # if move.isCastle:
+            #     castle_sfx.play()
 
-            elif move.isPawnPromotion:
-                promote_sfx.play()
+            # elif move.isPawnPromotion:
+            #     promote_sfx.play()
 
-            elif gs.checkMate and not gameOver:
-                gameOver = True
-                gameover_sfx.play()
+            # elif gs.checkMate and not gameOver:
+            #     gameOver = True
+            #     gameover_sfx.play()
 
-            elif gs.staleMate and not gameOver:
-                gameOver = True
-                gameover_sfx.play()
+            # elif gs.staleMate and not gameOver:
+            #     gameOver = True
+            #     gameover_sfx.play()
                                 
-            elif gs.inCheck():
-                check_sfx.play()
+            # elif gs.inCheck():
+            #     check_sfx.play()
 
-            elif move.peiceCaptured != "--":
-                capture_sfx.play()
+            # elif move.peiceCaptured != "--":
+            #     capture_sfx.play()
 
-            else:
-                move_sfx.play()
+            # else:
+            #     move_sfx.play()
 
             moveMade = False
             animate = False
