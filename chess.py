@@ -87,6 +87,7 @@ def main():
                     gs.undoMove()
                     animate = False
                     moveMade = True
+                    gameOver = False
 
                 if e.key == p.K_r:
                     gs = GameState()
