@@ -66,6 +66,28 @@ def findMinMaxMove(gs, validMoves, depth, whiteToMove):
 
     if depth == 0:
         return scoreMaterial(gs.board)
+    
+def scoreBoard(gs):
+    if gs.checkMate:
+        if gs.whiteToMove:
+            return -CHECKMATE
+        
+        else:
+            return CHECKMATE
+    
+    elif gs.staleMate:
+        return STALEMATE
+
+    score = 0
+    for r in gs.board:
+        for square in r:
+            if square[0] == 'w':
+                score += materialScore[square[1]]
+            
+            elif square[0] == 'b':
+                score-= materialScore[square[1]]
+    
+    return score
 
 
 def scoreMaterial(board):
