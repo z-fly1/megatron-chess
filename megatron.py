@@ -8,7 +8,7 @@ DEPTH = 2
 def findRandomMove(validMoves):
     return validMoves[random.randint(0, len(validMoves) - 1)]
 
-#best move looking 2 moves ahead
+#best move looking 2 moves ahead, (mimmax without reccursion)
 def findBestMove(gs, validMoves):
     opponentMinmaxScore = CHECKMATE
     bestPlayerMove = None
@@ -59,7 +59,8 @@ def findBestMove(gs, validMoves):
     global nextMove
     nextMove = None
     #findMinMaxMove(gs, validMoves, DEPTH, gs.whiteToMove)
-    findMoveNegaMax(gs, validMoves, DEPTH, 1 if gs.whiteToMove else -1)
+    # findMoveNegaMax(gs, validMoves, DEPTH, 1 if gs.whiteToMove else -1)
+    findMoveNegaMaxAlphaBeta(gs, validMoves, DEPTH, -CHECKMATE, CHECKMATE, 1 if gs.whiteToMove else -1)
     return nextMove
 
 
@@ -120,6 +121,35 @@ def findMoveNegaMax(gs, validMoves, depth, turnMultiplyer): #1 white to move, -1
                 nextMove = move
 
         gs.undoMove()
+
+    return maxScore
+
+def findMoveNegaMaxAlphaBeta(gs, validMoves, depth, alpha, beta, turnMultiplyer): #1 white to move, -1 black to move
+    global nextMove
+    random.shuffle(validMoves)
+    if depth == 0:
+        return turnMultiplyer * scoreBoard(gs)
+
+    maxScore = -CHECKMATE
+    for move in validMoves:
+        gs.makeMove(move)
+        nextMoves = gs.getValidMoves()
+
+        score = -findMoveNegaMaxAlphaBeta(gs, nextMoves, depth-1, -beta, -alpha, -turnMultiplyer)
+        
+        if score > maxScore:
+            maxScore = score
+
+            if depth == DEPTH:
+                nextMove = move
+
+        gs.undoMove()
+
+        if maxScore > alpha:
+            alpha = maxScore
+
+        if alpha >= beta:
+            break
 
     return maxScore
 
