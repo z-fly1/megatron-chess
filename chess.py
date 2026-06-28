@@ -44,7 +44,7 @@ def main():
     castle_sfx = p.mixer.Sound('sounds/castle.mp3')
     check_sfx = p.mixer.Sound('sounds/move-check.mp3')
 
-    playerOne = True #its human
+    playerOne = False #its human
     playerTwo = False #its ai
 
     while running:
@@ -101,7 +101,7 @@ def main():
 
         #computer moves
         if not gameOver and not isHumanTurn:
-            computerMove = megatron.findMinMaxBestMove(gs, validMoves)
+            computerMove = megatron.findBestMove(gs, validMoves)
             if computerMove is None:
                 computerMove = megatron.findRandomMove(validMoves)
             gs.makeMove(computerMove)
