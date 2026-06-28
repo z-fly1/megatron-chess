@@ -8,6 +8,7 @@ DEPTH = 2
 def findRandomMove(validMoves):
     return validMoves[random.randint(0, len(validMoves) - 1)]
 
+#best move looking 2 moves ahead
 def findBestMove(gs, validMoves):
     opponentMinmaxScore = CHECKMATE
     bestPlayerMove = None
@@ -54,10 +55,11 @@ def findBestMove(gs, validMoves):
     return bestPlayerMove
 
 #make the first reccursive call
-def findMinMaxBestMove(gs, validMoves):
+def findBestMove(gs, validMoves):
     global nextMove
     nextMove = None
-    findMinMaxMove(gs, validMoves, DEPTH, gs.whiteToMove)
+    #findMinMaxMove(gs, validMoves, DEPTH, gs.whiteToMove)
+    findMoveNegaMax(gs, validMoves, DEPTH, 1 if gs.whiteToMove else -1)
     return nextMove
 
 
@@ -98,6 +100,28 @@ def findMinMaxMove(gs, validMoves, depth, whiteToMove):
             gs.undoMove()
 
         return minScore
+    
+def findMoveNegaMax(gs, validMoves, depth, turnMultiplyer): #1 white to move, -1 black to move
+    global nextMove
+    if depth == 0:
+        return turnMultiplyer * scoreBoard(gs)
+
+    maxScore = -CHECKMATE
+    for move in validMoves:
+        gs.makeMove(move)
+        nextMoves = gs.getValidMoves()
+
+        score = -findMoveNegaMax(gs, nextMoves, depth-1, -turnMultiplyer)
+        
+        if score > maxScore:
+            maxScore = score
+
+            if depth == DEPTH:
+                nextMove = move
+
+        gs.undoMove()
+
+    return maxScore
 
     
 def scoreBoard(gs):
