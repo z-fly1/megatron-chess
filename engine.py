@@ -431,6 +431,7 @@ class Move():
             else:
                 self.peiceCaptured = "bP"
 
+        self.isCapture = self.peiceCaptured != "--"
         self.isCastle = isCastle
 
         
@@ -461,3 +462,24 @@ class Move():
 
     def getNotationRank(self, r, c):
         return self.rankToFile[c] + str(self.rowToRank[r])
+    
+
+    def __str__(self):
+        
+        if self.isCastle:
+            return "O-O" if self.endCol == 6 else "O-O-O" #castle move notation
+        
+        endSquare = self.getNotationRank(self.endRow, self.endCol)
+
+        if self.peiceMoved[1] == "P":
+            if self.isCapture:
+                return self.rankToFile[self.startCol] + "x" + endSquare
+            else:
+                return endSquare
+        
+
+        moveString = self.peiceMoved[1]
+        if self.isCapture:
+            moveString += "x"
+        
+        return moveString + endSquare
