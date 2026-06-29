@@ -64,7 +64,7 @@ def main():
                     location = p.mouse.get_pos()
                     col = int(location[0]//SQ_SIZE)
                     row = int(location[1] // SQ_SIZE)
-                    if sqSelected == (row, col):
+                    if sqSelected == (row, col) or col >= 8:
                         sqSelected = ()
                         playerMove = []
                     else:
