@@ -208,7 +208,6 @@ def findMoveNegaMaxAlphaBeta(gs, validMoves, depth, alpha, beta, turnMultiplyer)
 
             if depth == DEPTH:
                 nextMove = move
-                print(move, score)
 
         gs.undoMove()
 
