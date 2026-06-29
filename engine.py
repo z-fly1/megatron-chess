@@ -404,6 +404,7 @@ class CastleRights():
 
 
 class Move():
+    
     def __init__(self, sqStart, sqEnd, board, isEnpassant=False, isCastle=False):
         self.startRow = sqStart[0]
         self.startCol = sqStart[1]
@@ -412,6 +413,9 @@ class Move():
 
         self.peiceMoved = board[self.startRow][self.startCol]
         self.peiceCaptured = board[self.endRow][self.endCol]
+
+        self.rankToFile = {0: "a", 1:"b", 2:"c", 3:"d", 4:"e", 5:"f", 6:"g", 7: "h"}
+        self.rowToRank = {0 : 8, 1:7, 2:6, 3:5, 4:4, 5:3, 6:2, 7:1}
 
 
         self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
@@ -438,25 +442,22 @@ class Move():
             return False
         
 
-    def getChessNotaion(self, sqStart, sqEnd, board):
+    def getChessNotaion(self):
 
-        self.startRow = sqStart[0]
-        self.startCol = sqStart[1]
-        self.endRow = sqEnd[0]
-        self.endCol = sqEnd[1]
+        return self.getNotationRank(self.startRow, self.startCol) + self.getNotationRank(self.endRow, self.endCol)
 
-        rankToFile = {0: "a", 1:"b", 2:"c", 3:"d", 4:"e", 5:"f", 6:"g", 7: "h"}
-        rowToRank = {0 : 8, 1:7, 2:6, 3:5, 4:4, 5:3, 6:2, 7:1}
+        # notation = ""
+        # color = board[self.startRow][self.startCol][0]
+        # peice = board[self.startRow][self.startCol][1]
 
-        notation = ""
-        color = board[self.startRow][self.startCol][0]
-        peice = board[self.startRow][self.startCol][1]
+        # if peice == "P":
+        #     print(rankToFile[self.endCol] + str(rowToRank[self.endRow]))
 
-        if peice == "P":
-            print(rankToFile[self.endCol] + str(rowToRank[self.endRow]))
+        # elif board[self.endRow][self.endCol][1] != "-":
+        #     print( peice + "x" + rankToFile[self.endCol] + str(rowToRank[self.endRow]))
 
-        elif board[self.endRow][self.endCol][1] != "-":
-            print( peice + "x" + rankToFile[self.endCol] + str(rowToRank[self.endRow]))
+        # else:
+        #     print( peice + rankToFile[self.endCol] + str(rowToRank[self.endRow]))
 
-        else:
-            print( peice + rankToFile[self.endCol] + str(rowToRank[self.endRow]))
+    def getNotationRank(self, r, c):
+        return self.rankToFile[c] + str(self.rowToRank[r])
