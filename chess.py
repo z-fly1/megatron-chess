@@ -5,6 +5,8 @@ import math
 import megatron
 
 WIDTH = HEIGHT = 512
+MOVE_LOG_WIDTH = 250
+MOVE_LOG_HEIGHT = HEIGHT
 DIMENTION = 8
 SQ_SIZE = WIDTH / DIMENTION
 
@@ -22,7 +24,7 @@ def loadImages():
         IMAGES[peice] = p.transform.scale(p.image.load("imgs/svg/"+ peice + ".svg"), (SQ_SIZE, SQ_SIZE))
 
 def main():
-    screen = p.display.set_mode((WIDTH, HEIGHT))
+    screen = p.display.set_mode((WIDTH + MOVE_LOG_WIDTH, HEIGHT))
     clock = p.time.Clock()
     screen.fill(p.Color("White"))
     gs = GameState()
@@ -44,8 +46,10 @@ def main():
     castle_sfx = p.mixer.Sound('sounds/castle.mp3')
     check_sfx = p.mixer.Sound('sounds/move-check.mp3')
 
-    playerOne = False #its human
-    playerTwo = False #its ai
+    playerOne = True #its human
+    playerTwo = True #its ai
+
+    moveLogFont = p.font.SysFont('Arial', 12, False, False)
 
     while running:
 
@@ -143,7 +147,7 @@ def main():
 
         clock.tick(MAX_FPS)
         p.display.flip()
-        drawGame(screen, gs, validMoves, sqSelected)
+        drawGame(screen, gs, validMoves, sqSelected, moveLogFont)
 
         if gs.checkMate:
             gameOver = True
@@ -157,11 +161,11 @@ def main():
             gameOver = True
             drawText(screen, "Stalemate")
 
-def drawGame(screen, gs, validMoves, sqSelected):
+def drawGame(screen, gs, validMoves, sqSelected, moveLogFont):
     drawBoard(screen)
     highlightSquare(screen, gs, validMoves, sqSelected)
     drawPeice(screen, gs.board)
-
+    drawMoveLog(screen, gs, moveLogFont)
 
 def drawBoard(screen):
     global colors
@@ -200,6 +204,14 @@ def drawPeice(screen, board):
             peice = board[r][c]
             if peice != "--":
                 screen.blit(IMAGES[peice], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+def drawMoveLog(screen, gs, font):
+    pass
+    # moveLogContainer = p.Rect()
+
+    # txtObj = font.render(text, 0, p.Color("#2F352A"))
+    # txtLocation = p.Rect(0, 0, WIDTH, HEIGHT).move(WIDTH/2 - txtObj.get_width()/2, HEIGHT/2 - txtObj.get_height()/2)
+    # screen.blit(txtObj, txtLocation)
 
 def animateMove(move, screen, board, clock):
     global colors
