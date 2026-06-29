@@ -161,6 +161,16 @@ def drawGame(screen, gs, validMoves, sqSelected):
     drawBoard(screen)
     highlightSquare(screen, gs, validMoves, sqSelected)
     drawPeice(screen, gs.board)
+
+
+def drawBoard(screen):
+    global colors
+    colors = [p.Color("#DCCFC0"), p.Color("#5C6B4F")]
+
+    for r in range(DIMENTION):
+        for c in range(DIMENTION):
+            color = colors[((r+c)%2)]
+            p.draw.rect(screen, color, p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
    
 
 def highlightSquare(screen, gs, validMoves, sqSelected):
@@ -183,17 +193,6 @@ def highlightSquare(screen, gs, validMoves, sqSelected):
                     screen.blit(s, (move.endCol*SQ_SIZE, move.endRow*SQ_SIZE))
                     
 
-
-
-def drawBoard(screen):
-    global colors
-    colors = [p.Color("#DCCFC0"), p.Color("#5C6B4F")]
-
-    for r in range(DIMENTION):
-        for c in range(DIMENTION):
-            color = colors[((r+c)%2)]
-            p.draw.rect(screen, color, p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
-            
 
 def drawPeice(screen, board):
     for r in range(DIMENTION):
@@ -243,6 +242,8 @@ def drawText(screen, text):
     
     screen.blit(txtObj, txtLocation)
     screen.blit(txtObj2, txtLocation.move(-2,-2))
+
+    
 
 
 
