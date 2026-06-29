@@ -1,9 +1,75 @@
 import random
 
-materialScore = {"K": 0, "Q": 9, "B": 3, "N": 3, "R": 5, "P" : 1}
+materialScore = {"K": 0, "Q": 900, "B": 330, "N": 320, "R": 500, "P" : 100}
+
+knightScores = [[-50,-40,-30,-30,-30,-30,-40,-50],
+                [-40,-20,  0,  0,  0,  0,-20,-40],
+                [-30,  0, 10, 15, 15, 10,  0,-30],
+                [-30,  5, 15, 20, 20, 15,  5,-30],
+                [-30,  0, 15, 20, 20, 15,  0,-30],
+                [-30,  5, 10, 15, 15, 10,  5,-30],
+                [-40,-20,  0,  5,  5,  0,-20,-40],
+                [-50,-40,-30,-30,-30,-30,-40,-50],]
+
+bishopScores = [[-20,-10,-10,-10,-10,-10,-10,-20],
+                [-10,  5,  0,  0,  0,  0,  5,-10],
+                [-10, 10, 10, 10, 10, 10, 10,-10],
+                [-10,  0, 10, 10, 10, 10,  0,-10],
+                [-10,  5,  5, 10, 10,  5,  5,-10],
+                [-10,  0,  5, 10, 10,  5,  0,-10],
+                [-10,  0,  0,  0,  0,  0,  0,-10],
+                [-20,-10,-10,-10,-10,-10,-10,-20],]
+
+queenScores = [[-20,-10,-10, -5, -5,-10,-10,-20],
+            [-10,  0,  0,  0,  0,  0,  0,-10],
+            [-10,  0,  5,  5,  5,  5,  0,-10],
+            [ -5,  0,  5,  5,  5,  5,  0, -5],
+            [  0,  0,  5,  5,  5,  5,  0, -5],
+            [-10,  5,  5,  5,  5,  5,  0,-10],
+            [-10,  0,  5,  0,  0,  0,  0,-10],
+            [-20,-10,-10, -5, -5,-10,-10,-20],]
+
+kingScores = [[-30,-40,-40,-50,-50,-40,-40,-30],
+            [-30,-40,-40,-50,-50,-40,-40,-30],
+            [-30,-40,-40,-50,-50,-40,-40,-30],
+            [-30,-40,-40,-50,-50,-40,-40,-30],
+            [-20,-30,-30,-40,-40,-30,-30,-20],
+            [-10,-20,-20,-20,-20,-20,-20,-10],
+            [20,20, 0, 0, 0, 0,20,20],
+            [20,30,10, 0, 0,10,30,20],]
+
+pawnScores = [[ 0, 0, 0, 0, 0, 0, 0, 0],
+            [50,50,50,50,50,50,50,50],
+            [10,10,20,30,30,20,10,10],
+            [ 5, 5,10,25,25,10, 5, 5],
+            [ 0, 0, 0,20,20, 0, 0, 0],
+            [ 5,-5,-10, 0, 0,-10,-5, 5],
+            [ 5,10,10,-20,-20,10,10, 5],
+            [ 0, 0, 0, 0, 0, 0, 0, 0],]
+
+
+rookScores = [[ 0, 0, 5,10,10, 5, 0, 0],
+            [-5, 0, 0, 0, 0, 0, 0,-5],
+            [-5, 0, 0, 0, 0, 0, 0,-5],
+            [-5, 0, 0, 0, 0, 0, 0,-5],
+            [-5, 0, 0, 0, 0, 0, 0,-5],
+            [-5, 0, 0, 0, 0, 0, 0,-5],
+            [ 5,10,10,10,10,10,10, 5],
+            [ 0, 0, 5,10,10, 5, 0, 0],]
+
+
+piecePositionScores = {
+    "P": pawnScores,
+    "N": knightScores,
+    "B": bishopScores,
+    "R": rookScores,
+    "Q": queenScores,
+    "K": kingScores,
+}
+
 CHECKMATE = 1000
 STALEMATE = 0
-DEPTH = 2
+DEPTH = 3
 
 def findRandomMove(validMoves):
     return validMoves[random.randint(0, len(validMoves) - 1)]
@@ -142,6 +208,7 @@ def findMoveNegaMaxAlphaBeta(gs, validMoves, depth, alpha, beta, turnMultiplyer)
 
             if depth == DEPTH:
                 nextMove = move
+                print(move, score)
 
         gs.undoMove()
 
@@ -166,13 +233,19 @@ def scoreBoard(gs):
         return STALEMATE
 
     score = 0
-    for r in gs.board:
-        for square in r:
+    for row in range(len(gs.board)):
+        for col in range(len(gs.board[row])):
+            square = gs.board[row][col]
+            
+            if square!= "--":
+
+                piece = square[1]
+
             if square[0] == 'w':
-                score += materialScore[square[1]]
+                score += materialScore[square[1]] + piecePositionScores[piece][row][col] * .1
             
             elif square[0] == 'b':
-                score-= materialScore[square[1]]
+                score-= materialScore[square[1]] + piecePositionScores[piece][7- row][col] * .1
     
     return score
 
