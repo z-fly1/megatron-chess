@@ -73,7 +73,7 @@ def main():
 
                     if len(playerMove) == 2:
                         move = m(playerMove[0], playerMove[1], gs.board)
-                        move.getChessNotaion(playerMove[0], playerMove[1], gs.board)
+                        move.getChessNotaion()
                         for i in range(len(validMoves)):
                             if move == validMoves[i]:
                                 gs.makeMove(validMoves[i])
@@ -206,12 +206,33 @@ def drawPeice(screen, board):
                 screen.blit(IMAGES[peice], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
 def drawMoveLog(screen, gs, font):
-    pass
-    # moveLogContainer = p.Rect()
 
-    # txtObj = font.render(text, 0, p.Color("#2F352A"))
-    # txtLocation = p.Rect(0, 0, WIDTH, HEIGHT).move(WIDTH/2 - txtObj.get_width()/2, HEIGHT/2 - txtObj.get_height()/2)
-    # screen.blit(txtObj, txtLocation)
+    moveLogContainer = p.Rect(WIDTH, 0, MOVE_LOG_WIDTH, MOVE_LOG_HEIGHT)
+    p.draw.rect(screen, p.Color("#4A5643"), moveLogContainer)
+
+    moveLog = gs.moveLog
+    moveTexts = []
+
+    for i in range(0, len(moveLog), 2):
+        moveString = str(i//2 + 1) + ". " + moveLog[i].getChessNotaion() + " "
+        
+        if i + 1 < len(moveLog):
+            moveString += moveLog[i+1].getChessNotaion()
+
+        moveTexts.append(moveString)
+
+
+    padding = 5
+    textY = padding
+    lineSpacing = 4
+
+    for i in range(len(moveTexts)):
+        text = moveTexts[i]
+        txtObj = font.render(text, True, p.Color("#DDD4C8"))
+        txtLocation = moveLogContainer.move(padding, textY)
+        screen.blit(txtObj, txtLocation)
+
+        textY += txtObj.get_height() + lineSpacing
 
 def animateMove(move, screen, board, clock):
     global colors
