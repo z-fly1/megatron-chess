@@ -47,7 +47,7 @@ def main():
     check_sfx = p.mixer.Sound('sounds/move-check.mp3')
 
     playerOne = True #its human
-    playerTwo = True #its ai
+    playerTwo = False #its ai
 
     moveLogFont = p.font.SysFont('Arial', 12, False, False)
 
@@ -214,10 +214,10 @@ def drawMoveLog(screen, gs, font):
     moveTexts = []
 
     for i in range(0, len(moveLog), 2):
-        moveString = str(i//2 + 1) + ". " + moveLog[i].getChessNotaion() + " "
+        moveString = str(i//2 + 1) + ". " + str(moveLog[i]) + " "
         
         if i + 1 < len(moveLog):
-            moveString += moveLog[i+1].getChessNotaion()
+            moveString += str(moveLog[i+1])
 
         moveTexts.append(moveString)
 
