@@ -25,9 +25,8 @@ def loadImages():
 
 
 #The drawmenu function code is ai assisted (I asked chatgpt how to so certain things)
-def drawMenu(screen, selectedMode, aiDepth, modeRects, depthRects, startRect):
-    container = p.Rect(WIDTH, 0, MOVE_LOG_WIDTH, MOVE_LOG_HEIGHT)
-    p.draw.rect(screen, p.Color("#4A5643"), container)
+def drawMenu(screen, selectedMode, aiDepth, modeRects, depthRects, startRect, menuBg):
+    screen.blit(menuBg, (WIDTH, 0))
 
     titleFont = p.font.SysFont('Arial', 16, True, False)
     menuFont = p.font.SysFont('Arial', 13, False, False)
@@ -120,6 +119,8 @@ def main():
     startRect = p.Rect(0, 0, 130, 36)
     startRect.center = (WIDTH + MOVE_LOG_WIDTH // 2, startY)
 
+    menuBg = p.transform.scale(p.image.load("imgs/menu-bg.png"), (MOVE_LOG_WIDTH, MOVE_LOG_HEIGHT))
+
     while running:
 
         isHumanTurn = (gs.whiteToMove and playerOne) or (not gs.whiteToMove and playerTwo)
@@ -205,7 +206,7 @@ def main():
 
         clock.tick(MAX_FPS)
         p.display.flip()
-        drawGame(screen, gs, validMoves, sqSelected, moveLogFont, gameStarted, selectedMode, aiDepth, modeRects, depthRects, startRect)
+        drawGame(screen, gs, validMoves, sqSelected, moveLogFont, gameStarted, selectedMode, aiDepth, modeRects, depthRects, startRect, menuBg)
 
         if gameStarted:
             if gs.checkMate:
@@ -219,14 +220,14 @@ def main():
                 drawText(screen, "Stalemate")
 
 
-def drawGame(screen, gs, validMoves, sqSelected, moveLogFont, gameStarted, selectedMode, aiDepth, modeRects, depthRects, startRect):
+def drawGame(screen, gs, validMoves, sqSelected, moveLogFont, gameStarted, selectedMode, aiDepth, modeRects, depthRects, startRect, menuBg):
     drawBoard(screen)
     highlightSquare(screen, gs, validMoves, sqSelected)
     drawPeice(screen, gs.board)
     if gameStarted:
         drawMoveLog(screen, gs, moveLogFont)
     else:
-        drawMenu(screen, selectedMode, aiDepth, modeRects, depthRects, startRect)
+        drawMenu(screen, selectedMode, aiDepth, modeRects, depthRects, startRect, menuBg)
 
 def drawBoard(screen):
     global colors
