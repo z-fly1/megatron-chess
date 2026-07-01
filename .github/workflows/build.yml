@@ -36,6 +36,7 @@ jobs:
 
       - name: Build executable (Windows)
         if: runner.os == 'Windows'
+        shell: cmd
         run: |
           pyinstaller --noconfirm --windowed --name "Megatron Chess" ^
           --add-data "imgs;imgs" ^
