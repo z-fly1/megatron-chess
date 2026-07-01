@@ -192,7 +192,7 @@ def findMoveNegaMax(gs, validMoves, depth, turnMultiplyer): #1 white to move, -1
 
 def findMoveNegaMaxAlphaBeta(gs, validMoves, depth, alpha, beta, turnMultiplyer): #1 white to move, -1 black to move
     global nextMove
-    random.shuffle(validMoves)
+    # random.shuffle(validMoves)
     if depth == 0:
         return turnMultiplyer * scoreBoard(gs)
 
